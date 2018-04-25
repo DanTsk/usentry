@@ -1,6 +1,6 @@
 # USentry
 Progressive, interactive TypeScript framework for unit testing using decorators.
-[![Dashboard](https://i.imgur.com/cnrLOnE.png "Dashboard")](https://i.imgur.com/ASkUILm.png "Dashboard")
+[![Dashboard](https://i.imgur.com/ASkUILm.png "Dashboard")](https://i.imgur.com/ASkUILm.png "Dashboard")
 
 ```typescript
 import { Section, DescribeTest, Parameterized } from 'usentry'
