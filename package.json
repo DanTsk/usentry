@@ -1,5 +1,9 @@
 {
-  "name": "sentry",
+  "name": "usentry",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DanTsk/usentry"
+  },
   "version": "0.1.0",
   "description": "Progressive TypeScript framework for unit testing",
   "main": "build/export.js",

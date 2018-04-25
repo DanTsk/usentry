@@ -42,7 +42,7 @@ export default class LeftPanel extends React.Component<any,any>{
 
     public render(){
         return (
-            <Col md={2} className="m-0 pt-5 height-panel sticky-col" style={{ paddingTop: '15px!important'}}>
+            <Col md={2} className="m-0 pt-5 height-panel sticky-col stats-panel">
                 <InfoCard 
                     title="CPU usage"
                     defaultValue="0.0"

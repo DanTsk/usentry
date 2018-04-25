@@ -439,6 +439,10 @@ span.attempt {
     justify-content: center;
 }
 
+.height-panel.sticky-col.stats-panel{
+    padding-top: 15px!important;
+}
+
 .info-card .stat.extended {
     height: calc(100% - 24px);
 }
