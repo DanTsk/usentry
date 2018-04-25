@@ -11,7 +11,7 @@ import { expect } from 'chai'
 export class StringTest{
 
     @DescribeTest('2 strings should be equals')
-	@Parameterized(["1","1"], ["3","3"])
+    @Parameterized(["1","1"], ["3","3"])
     equality(str1: string, str2: string){
         expect(str1).to.be.equals(str2);
     }
