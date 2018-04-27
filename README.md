@@ -4,6 +4,8 @@ Progressive, interactive TypeScript framework for unit testing using decorators.
 #### Features:
 - Support of assertion libraries (like Chai)
 - Support of async functions
+- Resources usage
+- Console interception
 - Hot Reloading
 - Interactive Dashboard
 
