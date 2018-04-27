@@ -1,5 +1,13 @@
 # USentry
 Progressive, interactive TypeScript framework for unit testing using decorators.
+
+#### Features:
+- Support of assertion libraries (like Chai)
+- Support of async functions
+- Hot Reloading
+- Interactive Dashboard
+
+### Preview
 [![Dashboard](https://i.imgur.com/ASkUILm.png "Dashboard")](https://i.imgur.com/ASkUILm.png "Dashboard")
 
 ```typescript
@@ -23,3 +31,13 @@ export class StringTest{
 npm install usentry --save-dev
 npm install usentry-cli -g
 ```
+
+### Docs
+For now there are 4 decorators available
+```bash
+@Section(title, moduleTitle)
+@DescribeTest(name)
+@Parameterized(...values)
+@Repeated(times)
+```
+
