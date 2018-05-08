@@ -14,9 +14,7 @@ export function Section(title: string, module: string = 'Default'): ClassDecorat
 }
 
 export function DescribeTest(name: string): MethodDecorator{
-    return (target: Object, propertyKey: string | symbol,  descriptor: TypedPropertyDescriptor<any>) => {
-        Reflect.defineMetadata(DESCRIPTION, name, target, propertyKey)
-    }
+    return propertyDecoratorFactory(DESCRIPTION, name);
 }
 
 export function Parameterized(...values: any[]): PropertyDecorator{
