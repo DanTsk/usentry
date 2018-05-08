@@ -20,7 +20,7 @@ export class FileImporter{
         const toCreate = [];
 
         for(let prop of reflectProperties(instance)){          
-            const result = this.createItem(section, instance, prop);
+            const result = this.createItem(section, instance, prop, path);
             if(result !== null){
                  toCreate.push(result);
             }
@@ -40,9 +40,11 @@ export class FileImporter{
         const instance = new classType;
 
         const classKeys = reflectProperties(instance).filter(prop => Reflect.hasMetadata(RAW_DESCRIPTION, instance, prop) || Reflect.hasMetadata(DESCRIPTION, instance, prop));
-        const sectionKeys = Object.keys(this.storage.getSection(section.module, section.title).items);
-               
-        const toDelete = sectionKeys.filter(key => (!classKeys.includes(key)));        
+        const sectionKeys = Object.keys(this.storage.getSection(section.module, section.title).items);               
+        const mappedClassKeys = classKeys.map(prop => prop + path);
+
+        const toDelete: any = sectionKeys.filter(key => (!mappedClassKeys.includes(key) && this.storage.getSection(section.module, section.title).items[key]['filePath'] == path ) );        
+       
         this.storage.deleteKeys(section.module, section.title, toDelete);
         
         const toCreate = [];
@@ -50,13 +52,13 @@ export class FileImporter{
 
         for(const prop of classKeys){
             
-            if(!this.hasItem(section.module, section.title, prop)){
-                const item = this.createItem(section, instance, prop);
+            if(!this.hasItem(section.module, section.title, prop, path)){
+                const item = this.createItem(section, instance, prop, path);
                 if(item !== null){
                     toCreate.push(item);
                 }
             }else{
-                const item = this.changeItem(section, instance, prop);
+                const item = this.changeItem(section, instance, prop, path);
                 if(item !== null){
                     toChanage.push(item);
                 }
@@ -96,35 +98,36 @@ export class FileImporter{
         const instance = new classType;
 
         const classKeys = reflectProperties(instance).filter(prop => Reflect.hasMetadata(RAW_DESCRIPTION, instance, prop) || Reflect.hasMetadata(DESCRIPTION, instance, prop));
-        
-        this.storage.deleteKeys(section.module, section.title, classKeys);
+        const mappedClassKeys = classKeys.map(prop => prop + path);
+
+        this.storage.deleteKeys(section.module, section.title, mappedClassKeys);
 
         if(classKeys.length > 0){
             CoreSocket.Instance.emitDeletedKeys({
                 module: section.module,
                 section: section.title,
-                keys: classKeys
+                keys: mappedClassKeys
             }); 
         }
     }
 
 
 
-    private hasItem(moduleId: string, sectionId: string, itemId: string){
-        const item = this.storage.getItem(moduleId, sectionId, itemId);
+    private hasItem(moduleId: string, sectionId: string, itemId: string, path: string){
+        const item = this.storage.getItem(moduleId, sectionId, itemId + path);
         return (item !== null && item !== undefined);
     }
 
-    private createItem(section: any, instance: any, prop: any){
-        const target = instance[prop];
+    private createItem(section: any, instance: any, identifier: any, path: string){
+        const target = instance[identifier];
 
-        if(!Reflect.hasMetadata(RAW_DESCRIPTION, instance, prop) && !Reflect.hasMetadata(DESCRIPTION, instance, prop)){  
+        if(!Reflect.hasMetadata(RAW_DESCRIPTION, instance, identifier) && !Reflect.hasMetadata(DESCRIPTION, instance, identifier)){  
             return null;
         }
 
-        const { title, args, times } = this.getMetadata(instance, prop);      
+        const { title, args, times } = this.getMetadata(instance, identifier);      
         
-        const item = new Item(title, prop, (args || []), (times || 1), target.bind(instance));
+        const item = new Item(title, identifier, path, (args || []), (times || 1), target.bind(instance));
         item.funtionString = target.toString();
 
         const { moduleAlias, sectionAlias } = this.getAliases(section);
@@ -145,7 +148,7 @@ export class FileImporter{
         return { moduleAlias, sectionAlias };
     }
 
-    private changeItem(section: any, instance: any, prop: any){
+    private changeItem(section: any, instance: any, prop: any, path: string){
         const target = instance[prop];
 
         if(!Reflect.hasMetadata(RAW_DESCRIPTION, instance, prop) && !Reflect.hasMetadata(DESCRIPTION, instance, prop)){  
@@ -154,8 +157,8 @@ export class FileImporter{
 
         const { title, args, times } = this.getMetadata(instance, prop);        
     
-        const oldItem = this.storage.getItem(section.module, section.title, prop);
-        const item = new Item(title, prop, (args || []), (times || 1), target.bind(instance));
+        const oldItem = this.storage.getItem(section.module, section.title, prop + path);
+        const item = new Item(title, prop, path, (args || []), (times || 1), target.bind(instance));
         item.funtionString = target.toString();
 
         const { moduleAlias, sectionAlias } = this.getAliases(section);

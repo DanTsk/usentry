@@ -14,27 +14,9 @@ export class FileWatcher{
         Printer.Instance.printAction(`Watching ${process.cwd()} directory`)
 
         watch([`**/*.test.js`, `!node_modules`, `!**/node_modules`], { persistent: true})
-        .on('add', path => {
-            try{
-                this.emitter.onAdd(path);
-            }catch(error){
-                console.log(error);
-            }            
-        })
-        .on('change', path => {
-            try{
-                this.emitter.onChange(path)
-            }catch(error){
-                console.log(error);
-            } 
-        })
-        .on('unlink', path => { 
-            try{
-                this.emitter.onDelete(path)
-            }catch(error){
-                console.log(error);
-            } 
-        });
+        .on('add', path => this.emitter.onAdd(path))
+        .on('change', path => this.emitter.onChange(path))
+        .on('unlink', path => this.emitter.onDelete(path));
     }
 
 }

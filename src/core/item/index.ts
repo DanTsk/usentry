@@ -9,6 +9,7 @@ export interface ItemInfo{
 
 export class Item{
     private funcString: string;
+    private filePath: string;
 
     private title: string;
     private property: string;
@@ -20,9 +21,10 @@ export class Item{
     public times: number;
 
     
-    constructor(title: string, property: string, args: any[], times: number, func: Function){
+    constructor(title: string, property: string, path: string, args: any[], times: number, func: Function){
         this.title = title;
-        this.property = property;
+        this.property = property + path;
+        this.filePath = path;
         this.func = func;
         
         this.funcString = '';
